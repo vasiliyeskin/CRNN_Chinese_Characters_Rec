@@ -12,8 +12,9 @@ CUDNN:
 
 DATASET:
   DATASET: OWN
-  ROOT: "H:/DL-DATASET/360M/images"
-  JSON_FILE: {'train': 'lib/dataset/txt/train_own.txt', 'val': 'lib/dataset/txt/test_own.txt'}
+  ROOT: "/home/vasiliyeskin/CRNN_Chinese_Characters_Rec/sample/images_processed"
+  CHAR_FILE: 'sample/latex_vocab.txt'
+  JSON_FILE: { 'train': 'sample/train_filter.lst', 'val': 'sample/validate_filter.lst' }
   SCALE_FACTOR: 0.25
   ROT_FACTOR: 30
   STD: 0.193

@@ -26,8 +26,16 @@ def parse_arg():
         config = yaml.load(f)
         config = edict(config)
 
-    config.DATASET.ALPHABETS = alphabets.alphabet
-    config.MODEL.NUM_CLASSES = len(config.DATASET.ALPHABETS)
+    # config.DATASET.ALPHABETS = alphabets.alphabet
+    # config.MODEL.NUM_CLASSES = len(config.DATASET.ALPHABETS)
+
+    # create alphabets
+    with open(config.DATASET.CHAR_FILE, 'r') as f:
+        data = f.readlines()
+        alphabet = [x.rstrip() for x in data]
+
+    config.DATASET.ALPHABETS = alphabet
+    config.MODEL.NUM_CLASSES = len(alphabet)
 
     return config
 
