@@ -12,6 +12,7 @@ class BidirectionalLSTM(nn.Module):
     def forward(self, input):
         recurrent, _ = self.rnn(input)
         T, b, h = recurrent.size()
+        # print(T)
         t_rec = recurrent.view(T * b, h)
 
         output = self.embedding(t_rec)  # [T * b, nOut]
@@ -86,7 +87,7 @@ def weights_init(m):
 
 def get_crnn(config):
 
-    model = CRNN(config.MODEL.IMAGE_SIZE.H, 1, config.MODEL.NUM_CLASSES + 1, config.MODEL.NUM_HIDDEN)
+    model = CRNN(config.MODEL.IMAGE_SIZE.H, 1, config.MODEL.NUM_CLASSES + 2, config.MODEL.NUM_HIDDEN)
     model.apply(weights_init)
 
     return model

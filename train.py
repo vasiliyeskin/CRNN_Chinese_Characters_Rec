@@ -72,6 +72,8 @@ def main():
 
     # define loss function
     criterion = torch.nn.CTCLoss()
+    # criterion = torch.nn.NLLLoss(ignore_index=utils.PAD_TOKEN)
+    # criterion = torch.nn.CrossEntropyLoss(ignore_index=utils.PAD_TOKEN)
 
     last_epoch = config.TRAIN.BEGIN_EPOCH
     optimizer = utils.get_optimizer(config, model)
