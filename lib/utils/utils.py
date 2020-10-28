@@ -4,6 +4,8 @@ from pathlib import Path
 import os
 import torch
 
+PAD_TOKEN = 1  # special token for the unknown value
+
 def get_optimizer(config, model):
 
     optimizer = None
@@ -76,14 +78,16 @@ class strLabelConverter(object):
 
     def __init__(self, alphabet, ignore_case=False):
         self._ignore_case = ignore_case
-        if self._ignore_case:
-            alphabet = alphabet.lower()
-        self.alphabet = alphabet + '-'  # for `-1` index
+        # if self._ignore_case:
+        #     alphabet = alphabet.lower()
+        self.alphabet = alphabet
+        self.alphabet.append('for-1index')  # for `-1` index
 
         self.dict = {}
         for i, char in enumerate(alphabet):
             # NOTE: 0 is reserved for 'blank' required by wrap_ctc
-            self.dict[char] = i + 1
+            # 1 is PAD_TOKEN
+            self.dict[char] = i + 2
 
     def encode(self, text):
         """Support batch or single str.
@@ -105,9 +109,13 @@ class strLabelConverter(object):
             if decode_flag:
                 item = item.decode('utf-8','strict')
             length.append(len(item))
-            for char in item:
-                index = self.dict[char]
-                result.append(index)
+            # for char in item:
+            #     print(char)
+            #     print(self.dict)
+            #     index = self.dict[char]
+            #     result.append(index)
+
+            [result.append(self.dict[char]) if char in self.dict else result.append(PAD_TOKEN) for char in item]
         text = result
         return (torch.IntTensor(text), torch.IntTensor(length))
 

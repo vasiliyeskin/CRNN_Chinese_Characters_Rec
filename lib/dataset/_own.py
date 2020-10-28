@@ -12,6 +12,9 @@ class _OWN(data.Dataset):
         self.inp_h = config.MODEL.IMAGE_SIZE.H
         self.inp_w = config.MODEL.IMAGE_SIZE.W
 
+        with open(config.DATASET.FORMULAS_DIR) as file:
+            self.formulas = file.read().splitlines()
+
         self.dataset_name = config.DATASET.DATASET
 
         self.mean = np.array(config.DATASET.MEAN, dtype=np.float32)
@@ -21,7 +24,8 @@ class _OWN(data.Dataset):
 
         # convert name:indices to name:string
         with open(txt_file, 'r', encoding='utf-8') as file:
-            self.labels = [{c.split(' ')[0]: c.split(' ')[-1][:-1]} for c in file.readlines()]
+            # self.labels = [{c.split(' ')[0]: c.split(' ')[-1][:-1]} for c in file.readlines()]
+            self.labels = [{c.split(' ')[0]: self.get_formula(c.split(' ')[1]).split(' ')} for c in file.readlines()]
 
         print("load {} images!".format(self.__len__()))
 
@@ -46,7 +50,9 @@ class _OWN(data.Dataset):
         return img, idx
 
 
-
+    def get_formula(self, label):
+        # function which returns the formula
+        return self.formulas[int(label)]
 
 
 
